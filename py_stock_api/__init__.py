@@ -6,6 +6,7 @@ def main(global_config, **settings):
     """
     config = Configurator(settings=settings)
     # config.include('.models')
+    config.include('pyramid_restful')
     config.include('.routes')
     config.scan()
     return config.make_wsgi_app()
