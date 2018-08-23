@@ -1,0 +1,3 @@
+[run]
+source = py_stock_api
+omit = py_stock_api/test*
