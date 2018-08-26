@@ -7,5 +7,5 @@ def home_view(request):
     """ This takes a request and returns a message.
         request is not used at the moment
     """
-    message = 'Hello World mfer!'
+    message = 'Hello World!'
     return Response(body=message, status=200)
