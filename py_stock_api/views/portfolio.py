@@ -1,5 +1,5 @@
 from ..models.schemas import PortfolioSchema
-from ..models.schemas import Stock
+from ..models.schemas import StockSchema
 from pyramid_restful.viewsets import APIViewSet
 from sqlalchemy.exc import IntegrityError, DataError
 from pyramid.response import Response
@@ -41,7 +41,6 @@ class PortfolioAPIView(APIViewSet):
         except IntegrityError:
             return Response(json='Duplicate key Error. Portfolio already exsists', status=409)
 
-
         schema = PortfolioSchema()
         data = schema.dump(portfolio).data
 
@@ -73,7 +72,7 @@ class PortfolioAPIView(APIViewSet):
         return Response(status=204)
 
 
-def StockAPIView(APIViewSet):
+class StockAPIView(APIViewSet):
     def list(self, request):
         """ List all the stocks
         """
@@ -87,15 +86,41 @@ def StockAPIView(APIViewSet):
     def create(self, request):
         """ Creat a new stock record
         """
-        return Response(json={'message': 'Created a new record'}, status=201)
+        try:
+            kwargs = json.loads(request.body)
+        except json.JSONDecodeError as e:
+            return Response(e.msg, status=400)
+
+        if 'symbol' not in kwargs:
+            return Response(json='Expected value; stock symbol', status=400)
+        try:
+            stock = Stock.new(request, **kwargs)
+        except IntegrityError:
+            return Response(json='Duplicate key Error. Stock already exists', status=409)
+
+        schema = StockSchema()
+        data = schema.dump(stock).data
+
+        return Response(json=data, status=201)
 
     def destroy(self, request):
         """ Delete a stock from the user
         """
-        return Response(json={'message': 'Deleted the record'}, status=204)
+        if not id:
+            return Response(json='Not Found', status=404)
+
+        try:
+            Stock.remove(request=request, pk=id)
+
+            return Response(status=204)
+        except (DataError, AttributeError):
+            return Response(json='Not found', status=404)
+
+        return Response(status=204)
 
 
-def CompanyAPIView(APIViewSet):
+# these are not working
+class CompanyAPIView(APIViewSet):
     def retrieve(self, request, id=None):
         # http :6543/api/v1/company/{id}/
 

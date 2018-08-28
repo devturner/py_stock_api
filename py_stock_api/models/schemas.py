@@ -10,6 +10,6 @@ class PortfolioSchema(ModelSchema):
         model = Portfolio
 
 
-class Stock(ModelSchema):
+class StockSchema(ModelSchema):
     class Meta:
         model = Stock
