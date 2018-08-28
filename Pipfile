@@ -5,6 +5,10 @@ name = "pypi"
 
 [packages]
 py-stock-api = {editable = true, path = ".", extras = ["testing"]}
+"psycopg2" = "*"
+marshmallow = "*"
+marshmallow-sqlalchemy = "*"
+requests = "*"
 
 [dev-packages]
 
