@@ -28,8 +28,7 @@ def new(cls, request, **kwargs):
     request.dbsession.add(portfolio)
 
     return request.dbsession.query(cls).filter(
-        cls.
-    ).one_or_none()
+        cls.name == kwargs['name']).one_or_none()
 
 @classmethod
 def all(cls, request):

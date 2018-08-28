@@ -36,8 +36,7 @@ def new(cls, request, **kwargs):
     request.dbsession.add(stock)
 
     return request.dbsession.query(cls).filter(
-        cls.
-    ).one_or_none()
+        cls.symbol == kwargs['symbol']).one_or_none()
 
 # @classmethod
 # def all(cls, request):
