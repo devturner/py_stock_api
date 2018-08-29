@@ -12,7 +12,7 @@ def includeme(config):
     config.add_route('home', '/')
     config.add_route('lookup', '/api/v1/lookup/{symbol}')
 
-    router = ViewSetRouter(config)
+    router = ViewSetRouter(config, trailing_slash=False)
     # router.register('api/v1/location', WeatherLocationAPIView, 'location')
     router.register('api/v1/auth/{auth}', AuthAPIView, 'auth')
     router.register('api/v1/stocks', StockAPIView, 'stock portfolio')
