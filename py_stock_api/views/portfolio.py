@@ -12,7 +12,7 @@ import json
 
 @view_config(route_name='lookup', renderer='json', request_method='GET')
 def lookup(request):
-    """
+    """ Lookup a stock by the symbol
     """
     url = 'https://api.iextrading.com/1.0/stock/{}/company'.format(
         request.matchdict['symbol']
@@ -73,15 +73,15 @@ class PortfolioAPIView(APIViewSet):
 
 
 class StockAPIView(APIViewSet):
-    def list(self, request):
-        """ List all the stocks
-        """
-        return Response(json={'message': 'listing all stocks in portfollio'}, status=200)
-
     def retrieve(self, request):
         """ Get one of their stocks
         """
         return Response(json={'message': 'Get one stock from portfollio'}, status=200)
+
+    def list(self, request):
+        """ List all the stocks
+        """
+        return Response(json={'message': 'listing all stocks in portfollio'}, status=200)
 
     def create(self, request):
         """ Creat a new stock record
@@ -122,6 +122,8 @@ class StockAPIView(APIViewSet):
 # these are not working
 class CompanyAPIView(APIViewSet):
     def retrieve(self, request, id=None):
+        """get one of the companies
+        """
         # http :6543/api/v1/company/{id}/
 
         # Use the `id` to lookup that resource in the DB,
