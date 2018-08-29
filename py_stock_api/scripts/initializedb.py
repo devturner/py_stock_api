@@ -15,8 +15,8 @@ from ..models import (
     get_session_factory,
     get_tm_session,
     )
-from ..models import Stock
-from ..models import Portfolio
+from ..models import (Stock, Portfolio, Account, AccountRole)
+# from ..models import Portfolio
 
 
 def usage(argv):
@@ -39,10 +39,16 @@ def main(argv=sys.argv):
     # puts the models into the database
     Base.metadata.create_all(engine)
 
-    # session_factory = get_session_factory(engine)
+    session_factory = get_session_factory(engine)
 
-    # with transaction.manager:
-    #     dbsession = get_tm_session(session_factory, transaction.manager)
 
+    # TODO come back to his demo
+    with transaction.manager:
+        dbsession = get_tm_session(session_factory, transaction.manager)
+        roles = ['admin', 'view']
+        for role in roles:
+            model = AccountRole(name=role)
+            dbsession.add(model)
     #     model = MyModel(name='one', value=1)
     #     dbsession.add(model)
+

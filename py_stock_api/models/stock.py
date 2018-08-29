@@ -1,11 +1,13 @@
 from datetime import datetime as dt
 from sqlalchemy.exc import DBAPIError
+from sqlalchemy.orm import relationship
 from sqlalchemy import (
     Column,
     Index,
     Integer,
     Text,
     DateTime,
+    ForeignKey,
 )
 
 from .meta import Base
@@ -24,6 +26,8 @@ class Stock(Base):
     issueType = Column(Text)
     sector = Column(Text)
 
+    portfolios = relationship('Portfolio', back_populates='stocks')
+    portfolio_id = Column(Integer, ForeignKey('portfolios.id'), nullable=False)
     date_created = Column(DateTime, default=dt.now())
     date_updated = Column(DateTime, default=dt.now(), onupdate=dt.now())
 
