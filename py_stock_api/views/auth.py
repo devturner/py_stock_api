@@ -25,10 +25,30 @@ class AuthAPIView(APIViewSet):
                 return Response(json='Bad Request', status=400)
 
             # TODO: Refactor this for authentication / JSON Web Token tomorrow
-            return Response(json='Created', status=201)
+            return Response(
+                json_body={
+                    'token': request.create_jwt_token(
+                        account.email,
+                        roles=[role.name for role in account.account_roles],
+                        username=account.email,
+                    )
+                },
+                status=201
+            )
 
         if auth == 'login':
-            # TODO: Implement this for login features tomorrow
-            pass
+            authenticated = Account.check_credentials(request, data['email'], data['password'])
 
+            if authenticated:
+                return Response(
+                    json_body={
+                        'token': request.create_jwt_token(
+                            authenticated.email,
+                            roles=[role.name for role in authenticated.account_roles],
+                            username=authenticated.email,
+                        ),
+                    },
+                    status=201
+                )
+            return Response(json='Not Authorized', status=401)
         return Response(json='Not Found', status=404)

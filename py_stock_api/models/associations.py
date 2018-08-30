@@ -9,8 +9,8 @@ roles_association = Table(
     Column('role_id', Integer, ForeignKey('account_roles.id'))
 )
 
-portfolios_associations = Table(
-    'portfolio_association',
-    metadata,
-    Column('stock_id', Integer, ForeignKey('stocks.id')),
-)
+# portfolios_associations = Table(
+#     'portfolio_association',
+#     metadata,
+#     Column('stock_id', Integer, ForeignKey('stocks.id')),
+# )

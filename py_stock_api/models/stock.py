@@ -32,34 +32,34 @@ class Stock(Base):
     date_updated = Column(DateTime, default=dt.now(), onupdate=dt.now())
 
 
-@classmethod
-def new(cls, request, **kwargs):
-    if request.dbsessiom is None:
-        raise DBAPIError
-    stock = cls(**kwargs)
-    request.dbsession.add(stock)
+    @classmethod
+    def new(cls, request, **kwargs):
+        if request.dbsession is None:
+            raise DBAPIError
+        stock = cls(**kwargs)
+        request.dbsession.add(stock)
 
-    return request.dbsession.query(cls).filter(
-        cls.symbol == kwargs['symbol']).one_or_none()
+        return request.dbsession.query(cls).filter(
+            cls.symbol == kwargs['symbol']).one_or_none()
 
-# @classmethod
-# def all(cls, request):
-#     if request.dbsessiom is None:
-#         raise DBAPIError
+    # @classmethod
+    # def all(cls, request):
+    #     if request.dbsession is None:
+    #         raise DBAPIError
 
-#     return request.debsessions.query(cls).all()
+    #     return request.dbsession.query(cls).all()
 
-@classmethod
-def one(cls, request, pk=None):
-    if request.dbsessiom is None:
-        raise DBAPIError
+    @classmethod
+    def one(cls, request, pk=None):
+        if request.dbsession is None:
+            raise DBAPIError
 
-    return request.debsessions.query(cls).get(pk)
+        return request.dbsession.query(cls).get(pk)
 
-@classmethod
-def destroy(cls, request=None, pk=None):
-    if request.dbsessiom is None:
-        raise DBAPIError
+    @classmethod
+    def destroy(cls, request=None, pk=None):
+        if request.dbsession is None:
+            raise DBAPIError
 
-    return request.debsessions.query(cls).get(pk).delete()
+        return request.dbsession.query(cls).get(pk).delete()
 
