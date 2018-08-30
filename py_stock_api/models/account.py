@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 from .associations import roles_association
 from .role import AccountRole
 from datetime import datetime as dt
+from cryptacular import bcrypt
 from .portfolio import Portfolio
 
 from sqlalchemy import (
@@ -14,6 +15,8 @@ from sqlalchemy import (
     Text,
     DateTime,
 )
+
+manager = bcrypt.BCRYPTPasswordManager()
 
 
 class Account(Base):
@@ -34,7 +37,8 @@ class Account(Base):
         """Initilize a new user
         """
         self.email = email
-        self.password = password
+        self.password = manager.encode(password, 10)
+
 
     @classmethod
     def new(cls, request, email=None, password=None):
@@ -46,15 +50,38 @@ class Account(Base):
         user = cls(email, password)
         request.dbsession.add(user)
 
-        # TODO assing role to the user
+        # adding role to the user
+        # this is unsafe
+        admin_role = request.dbsession.query(AccountRole).filter(
+            AccountRole.name == 'admin').one_or_none()
+
+        user.account_roles.append(admin_role)
+        request.dbsession.flush()
 
         # this line adds the user to the database:
-        return request.dbsession.query(cls).filter(cls.email == email).one_or_none()
+        return request.dbsession.query(cls).filter(
+            cls.email == email).one_or_none()
 
+    @classmethod
+    def one(cls, request, email=None):
+        return request.dbsession.query(cls).filter(
+            cls.email == email).one_or_none()
 
     @classmethod
     def check_credentials(cls, request, email, password):
         """ Validate that the user exsists and that they are who theyclaim to be
         """
         # TODO: Complete this tomorrow as part of the login process
-        pass
+        if request.dbsession is None:
+            raise DBAPIError
+        try:
+            account = request.dbsession.query(cls).filter(
+                cls.email == email).one_or_none()
+        except DBAPIError:
+            return None
+
+        if account is not None:
+            if manager.check(account.password, password):
+                return account
+
+        return None

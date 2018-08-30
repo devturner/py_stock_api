@@ -9,6 +9,8 @@ py-stock-api = {editable = true, path = ".", extras = ["testing"]}
 marshmallow = "*"
 marshmallow-sqlalchemy = "*"
 requests = "*"
+cryptacular = "*"
+pyramid-jwt = "*"
 
 [dev-packages]
 

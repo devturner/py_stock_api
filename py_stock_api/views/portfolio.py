@@ -5,6 +5,7 @@ from sqlalchemy.exc import IntegrityError, DataError
 from pyramid.response import Response
 from pyramid.view import view_config
 from ..models import Portfolio
+from ..models import Account
 from ..models import Stock
 import requests
 import json
@@ -34,8 +35,13 @@ class PortfolioAPIView(APIViewSet):
         except json.JSONDecodeError as e:
             return Response(e.msg, status=400)
 
-        if 'portfolio_name' not in kwargs:
+        if 'name' not in kwargs:
             return Response(json='Expected value; portfolio name', status=400)
+
+        if request.authenticated_userid:
+            account = Account.one(request, request.authenticated_userid)
+            kwargs['account_id'] = account.id
+
         try:
             portfolio = Portfolio.new(request, **kwargs)
         except IntegrityError:
@@ -93,6 +99,13 @@ class StockAPIView(APIViewSet):
 
         if 'symbol' not in kwargs:
             return Response(json='Expected value; stock symbol', status=400)
+
+        if request.authenticated_userid:
+            account = Account.one(request, request.authenticated_userid)
+
+            # import pdb; pdb.set_trace()
+            kwargs['portfolio_id'] = account.portfolios[0].id
+
         try:
             stock = Stock.new(request, **kwargs)
         except IntegrityError:
