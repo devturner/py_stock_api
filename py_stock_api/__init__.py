@@ -14,6 +14,8 @@ class RootACL:
 
 
 def add_role_principles(userid, request):
+    """ give a user a role
+    """
     return request.jwt_claims.get('roles', [])
 
 def main(global_config, **settings):

@@ -64,6 +64,8 @@ class Account(Base):
 
     @classmethod
     def one(cls, request, email=None):
+        """ Return one account based on the logged in users email address
+        """
         return request.dbsession.query(cls).filter(
             cls.email == email).one_or_none()
 
