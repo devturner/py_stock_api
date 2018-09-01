@@ -13,6 +13,9 @@ class AuthAPIView(APIViewSet):
         verify a user
     """
     def create(self, request, auth=None):
+        """ Create an authorized user instance based on the users requested endpoint
+            endpoints being register & login
+        """
         data = json.loads(request.body.decode())
 
         if auth == 'register':

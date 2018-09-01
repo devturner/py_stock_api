@@ -14,6 +14,8 @@ from .meta import Base
 
 
 class Stock(Base):
+    """ building the stock table in the database
+    """
     __tablename__ = 'stocks'
     id = Column(Integer, primary_key=True)
     symbol = Column(Text)
@@ -34,6 +36,8 @@ class Stock(Base):
 
     @classmethod
     def new(cls, request, **kwargs):
+        """ Add a new stock to the a db
+        """
         if request.dbsession is None:
             raise DBAPIError
         stock = cls(**kwargs)
@@ -50,6 +54,8 @@ class Stock(Base):
     #     return request.dbsession.query(cls).all()
 
     @classmethod
+    """ get one stock from the database
+    """
     def one(cls, request, pk=None):
         if request.dbsession is None:
             raise DBAPIError
@@ -57,6 +63,8 @@ class Stock(Base):
         return request.dbsession.query(cls).get(pk)
 
     @classmethod
+    """ Delete a stock record from the database
+    """
     def destroy(cls, request=None, pk=None):
         if request.dbsession is None:
             raise DBAPIError
