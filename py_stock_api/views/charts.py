@@ -13,7 +13,7 @@ API_URL = 'https://api.iextrading.com/1.0'
 
 
 class ChartsAPIView(APIViewSet):
-    def create(self, request):
+    def list(self, request):
         """ Lookup a stock by the symbol
         """
         # url = 'https://api.iextrading.com/1.0/stock/{}/company'.format(
@@ -75,14 +75,19 @@ class ChartsAPIView(APIViewSet):
         p.rect(x='seqs', y='mid', width=w, height='height', fill_color='green', line_color='green', source=sourceInc)
         p.rect(x='seqs', y='mid', width=w, height='height', fill_color='red', line_color='red', source=sourceDec)
 
-        bk.show(p)
-        source_bar = bk.figure(plot_width=1500, plot_height=600)
+        # bk.show(p)
+        source_bar = bk.figure(plot_width=1500, plot_height=800)
         source_bar.vbar(x=df['seqs'], width=1, bottom=0, top=df['high'], color="blue")
-        bk.show(source_bar)
-        source_bar2 = bk.figure(plot_width=1500, plot_height=600)
+        # bk.show(source_bar)
+        source_bar2 = bk.figure(plot_width=1500, plot_height=800)
         source_bar2.vbar(x=df['seqs'], width=1, bottom=0, top=df['volume'], color="firebrick")
-        bk.show(source_bar2)
+        # bk.show(source_bar2)
         # bk.save(p,source_bar,source_bar2, './charts.html', title='5yr_charts')
 
-        bk.save(p, './static/5yr_charts.html', title='5yr_charts')
+        bk.save(p, './static/5yr_charts_candle.html', title='5yr_charts')
+        bk.save(source_bar, './static/5yr_charts_bar1.html', title='5yr_charts')
+        bk.save(source_bar2, './static/5yr_charts_bar2.html', title='5yr_charts')
 
+        response = "Your charts have been saved"
+
+        return Response(json=response, status=200)
