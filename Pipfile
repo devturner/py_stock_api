@@ -11,6 +11,9 @@ marshmallow-sqlalchemy = "*"
 requests = "*"
 cryptacular = "*"
 pyramid-jwt = "*"
+numpy = "*"
+pandas = "*"
+bokeh = "*"
 
 [dev-packages]
 

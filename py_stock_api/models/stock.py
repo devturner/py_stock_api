@@ -54,18 +54,18 @@ class Stock(Base):
     #     return request.dbsession.query(cls).all()
 
     @classmethod
-    """ get one stock from the database
-    """
     def one(cls, request, pk=None):
+        """ get one stock from the database
+        """
         if request.dbsession is None:
             raise DBAPIError
 
         return request.dbsession.query(cls).get(pk)
 
     @classmethod
-    """ Delete a stock record from the database
-    """
     def destroy(cls, request=None, pk=None):
+        """ Delete a stock record from the database
+        """
         if request.dbsession is None:
             raise DBAPIError
 
